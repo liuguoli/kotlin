@@ -232,8 +232,8 @@ fun createTargetedAnnotationStubs(
 }
 
 private fun replacementForPatternNames(annotationInfo: AnnotationInfo, project: Project): Collection<String> {
-    if (annotationInfo.classId.asSingleFqName().asString() != "kotlin.ReplacementFor") return emptyList()
-    val patterns = annotationInfo.arguments[Name.identifier("expressions")] as? Array<Any> ?: return emptyList()
+    if (annotationInfo.classId.asSingleFqName().asString() != ReplacementFor::class.qualifiedName) return emptyList()
+    val patterns = annotationInfo.arguments[Name.identifier(ReplacementFor::expressions.name)] as? Array<Any> ?: return emptyList()
     return patterns.mapNotNull { replacementForPatternName(it as String, project) }
 }
 

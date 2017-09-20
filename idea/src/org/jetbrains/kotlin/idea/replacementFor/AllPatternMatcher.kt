@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.idea.caches.resolve.getResolutionFacade
 import org.jetbrains.kotlin.idea.core.KotlinIndicesHelper
 import org.jetbrains.kotlin.idea.quickfix.replacement.PatternAnnotationData
 import org.jetbrains.kotlin.idea.quickfix.replacement.analyzeAsExpression
+import org.jetbrains.kotlin.idea.refactoring.move.ContainerInfo.UnknownPackage.fqName
 import org.jetbrains.kotlin.idea.stubindex.ReplacementForAnnotationIndex
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.*
@@ -84,7 +85,7 @@ class AllPatternMatcher(private val file: KtFile) {
     }
 
     private fun extractReplacementForPatterns(descriptor: CallableDescriptor): Collection<PatternAnnotationData> {
-        val fqName = FqName("kotlin.ReplacementFor") //TODO
+        val fqName = FqName(ReplacementFor::class.qualifiedName!!)
         return descriptor.annotations
                 .firstOrNull { it.fqName == fqName }
                 ?.extractData() ?: emptyList()
@@ -92,11 +93,11 @@ class AllPatternMatcher(private val file: KtFile) {
     }
 
     private fun AnnotationDescriptor.extractData(): Collection<PatternAnnotationData> {
-        val patternValues = argumentValue("expressions") as? List<*> ?: return emptyList() //TODO
+        val patternValues = argumentValue(ReplacementFor::expressions.name) as? List<*> ?: return emptyList()
         if (patternValues.any { it !is StringValue }) return emptyList()
         val patterns = patternValues.map { (it as StringValue).value }
 
-        val importValues = argumentValue("imports") as? List<*> ?: emptyList<StringValue>() //TODO
+        val importValues = argumentValue(ReplacementFor::imports.name) as? List<*> ?: emptyList<StringValue>()
         if (importValues.any { it !is StringValue }) return emptyList()
         val imports = importValues.map { (it as StringValue).value }
 

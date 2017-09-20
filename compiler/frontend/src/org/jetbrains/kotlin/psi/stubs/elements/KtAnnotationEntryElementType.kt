@@ -21,9 +21,7 @@ import com.intellij.psi.stubs.IndexSink
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
-import com.intellij.util.io.StringRef
 import org.jetbrains.annotations.NonNls
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.plainContent
 import org.jetbrains.kotlin.psi.stubs.KotlinAnnotationEntryStub
@@ -71,7 +69,7 @@ class KtAnnotationEntryElementType(
 
     private fun KtAnnotationEntry.replacementForPatternNames(): Collection<String> {
         val referencedName = (calleeExpression?.typeReference?.typeElement as? KtUserType)?.referencedName ?: return emptyList()
-        if (referencedName != "ReplacementFor") return emptyList() //TODO: import aliases
+        if (referencedName != ReplacementFor::class.simpleName) return emptyList() //TODO: import aliases
         return extractExpressionsFromReplacementForAnnotation(this)
                 .mapNotNull { it as? KtStringTemplateExpression }
                 .mapNotNull { replacementForPatternName(it.plainContent, project) }
