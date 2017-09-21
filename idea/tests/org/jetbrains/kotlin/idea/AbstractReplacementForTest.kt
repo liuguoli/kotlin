@@ -64,7 +64,7 @@ abstract class AbstractReplacementForTest : KotlinLightCodeInsightFixtureTestCas
                 }
 
                 for ((expression, match) in replacements) {
-                    match.replaceExpression(expression)
+                    match.replaceExpression(expression, bindingContext)
                 }
             }
 
