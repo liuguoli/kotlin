@@ -315,6 +315,10 @@ tasks {
         }
     }
 
+    "gradlePluginIntegrationTest" {
+        dependsOn(":kotlin-gradle-plugin-integration-tests:test")
+    }
+
     "jvmCompilerTest" {
         dependsOn("dist")
         dependsOn(":compiler:test",
